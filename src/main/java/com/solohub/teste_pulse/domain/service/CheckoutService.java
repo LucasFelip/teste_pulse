@@ -22,7 +22,7 @@ public class CheckoutService {
     private final FaturamentoService faturamentoService;
 
     @Transactional
-    public Pedido checkout (Long clienteId, Long carrinhoId, Long enderecoId, Long transportadoraId, FormaPagamento formaPagamento) {
+    public Pedido checkout (Long carrinhoId, Long enderecoId, Long transportadoraId, FormaPagamento formaPagamento) {
         var carrinho = carrinhoRepository.findById(carrinhoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Carrinho",carrinhoId));
         var endereco = enderecoRepository.findById(enderecoId)

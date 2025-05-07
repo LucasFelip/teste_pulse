@@ -1,5 +1,6 @@
 package com.solohub.teste_pulse.domain.model;
 
+import com.solohub.teste_pulse.domain.model.enums.CartStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +29,7 @@ import java.util.List;
 @Builder
 public class Carrinho {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "cliente_id", nullable = false)
@@ -36,6 +37,8 @@ public class Carrinho {
 
     @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemCarrinho> itens = new ArrayList<>();
+
+    private CartStatus status;
 
     @CreationTimestamp
     private OffsetDateTime dataCriacao;

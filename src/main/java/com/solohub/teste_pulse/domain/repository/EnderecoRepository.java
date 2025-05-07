@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface EnderecoRepository extends JpaRepository<Endereco, Integer> {
+public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
     List<Endereco> findByCliente_Id(Long clienteId);
     Optional<Endereco> findByCliente_IdAndIsPrincipalTrue(Long clienteId);
 }

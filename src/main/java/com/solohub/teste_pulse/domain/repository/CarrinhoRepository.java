@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CarrinhoRepository extends JpaRepository<Carrinho, Integer> {
+public interface CarrinhoRepository extends JpaRepository<Carrinho, Long> {
     List<Carrinho> findByClienteId(Long clienteId);
     Optional<Carrinho> findByClienteIdAndStatus(Long clienteId, CartStatus status);
 }

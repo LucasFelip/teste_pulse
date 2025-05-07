@@ -32,7 +32,7 @@ import java.util.List;
 @Builder
 public class Pedido {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "cliente_id")

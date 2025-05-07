@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CarinhoService {
+public class CarrinhoService {
     private final CarrinhoRepository carrinhoRepository;
     private final ClienteRepository clienteRepository;
     private final ProdutoRepository produtoRepository;

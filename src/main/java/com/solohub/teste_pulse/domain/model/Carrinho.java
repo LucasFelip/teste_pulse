@@ -3,6 +3,8 @@ package com.solohub.teste_pulse.domain.model;
 import com.solohub.teste_pulse.domain.model.enums.CartStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,6 +41,7 @@ public class Carrinho {
     @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemCarrinho> itens = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
     private CartStatus status;
 
     @CreationTimestamp

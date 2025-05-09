@@ -1,4 +1,4 @@
-package com.solohub.teste_pulse.api.config;
+package com.solohub.teste_pulse.core.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

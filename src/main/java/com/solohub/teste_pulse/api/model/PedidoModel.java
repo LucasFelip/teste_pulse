@@ -1,9 +1,9 @@
-package com.solohub.teste_pulse.api.dto.pedido;
+package com.solohub.teste_pulse.api.model;
 
-import com.solohub.teste_pulse.api.dto.itemPedido.ItemPedidoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -15,13 +15,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PedidoDTO {
-    private Long id;
+@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
+public class PedidoModel extends AbstractModel {
     private Long clienteId;
     private Long enderecoId;
     private Long transportadoraId;
     private String formaPagamento;
-    private List<ItemPedidoDTO> itens = new ArrayList<>();
+    private List<ItemPedidoModel> itens = new ArrayList<>();
     private BigDecimal frete;
     private BigDecimal valorTotal;
     private String status;

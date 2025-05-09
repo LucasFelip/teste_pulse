@@ -1,10 +1,10 @@
-package com.solohub.teste_pulse.api.dto.carrinho;
+package com.solohub.teste_pulse.api.model;
 
-import com.solohub.teste_pulse.api.dto.itemCarrinho.ItemCarrinhoDTO;
 import com.solohub.teste_pulse.domain.model.enums.CartStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -14,9 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CarrinhoDTO {
-    private Long id;
+@EqualsAndHashCode (callSuper = true,onlyExplicitlyIncluded = true)
+public class CarrinhoModel extends AbstractModel {
     private Long clienteId;
-    private List<ItemCarrinhoDTO> itens = new ArrayList<>();
+    private List<ItemCarrinhoModel> itens = new ArrayList<>();
     private CartStatus status;
 }

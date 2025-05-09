@@ -1,8 +1,9 @@
-package com.solohub.teste_pulse.api.dto.transportadora;
+package com.solohub.teste_pulse.api.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -11,8 +12,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TransportadoraDTO {
-    private Long id;
+@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
+public class TransportadoraModel extends AbstractModel {
     private String nome;
     private BigDecimal freteFixo;
 }

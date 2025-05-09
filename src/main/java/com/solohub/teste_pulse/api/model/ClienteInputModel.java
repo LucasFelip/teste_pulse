@@ -1,5 +1,7 @@
-package com.solohub.teste_pulse.api.dto.cliente;
+package com.solohub.teste_pulse.api.model;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ClienteDTO {
-    private Long id;
+public class ClienteInputModel {
+    @NotBlank
     private String nome;
+
+    @NotBlank
+    @Email
     private String email;
 }

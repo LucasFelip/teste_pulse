@@ -1,8 +1,9 @@
-package com.solohub.teste_pulse.api.dto.relatorio;
+package com.solohub.teste_pulse.api.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -12,8 +13,8 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RelatorioPedidoDTO {
-    private Long pedidoId;
+@EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
+public class RelatorioPedidoModel extends AbstractModel {
     private Long notaFiscalId;
     private String numeroNota;
     private OffsetDateTime dataEmissao;

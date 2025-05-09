@@ -37,7 +37,6 @@ public class NotaFiscal {
     @CreationTimestamp
     private OffsetDateTime dataEmissao;
 
-    @Lob
     private String jsonNota;
 
     public void prePersist() {

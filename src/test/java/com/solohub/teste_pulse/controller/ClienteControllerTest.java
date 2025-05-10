@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@WebMvcTest(controllers = ClienteController.class)
+@WebMvcTest(ClienteController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 class ClienteControllerTest {

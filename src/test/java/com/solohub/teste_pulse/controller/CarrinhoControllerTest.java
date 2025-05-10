@@ -1,10 +1,10 @@
 package com.solohub.teste_pulse.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.solohub.teste_pulse.api.assembler.CarrinhoAssembler;
 import com.solohub.teste_pulse.api.controller.CarrinhoController;
+import com.solohub.teste_pulse.api.assembler.CarrinhoAssembler;
 import com.solohub.teste_pulse.api.model.CarrinhoModel;
-import com.solohub.teste_pulse.api.model.ItemCarrinhoModel;
+import com.solohub.teste_pulse.api.model.ItemCarrinhoInputModel;
 import com.solohub.teste_pulse.domain.model.Carrinho;
 import com.solohub.teste_pulse.domain.model.enums.CartStatus;
 import com.solohub.teste_pulse.domain.service.CarrinhoService;
@@ -24,12 +24,12 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = CarrinhoController.class)
+@WebMvcTest(CarrinhoController.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = false)
 public class CarrinhoControllerTest {
@@ -59,10 +59,10 @@ public class CarrinhoControllerTest {
                     .dataCriacao(OffsetDateTime.now())
                     .build();
             CarrinhoModel model = CarrinhoModel.builder()
-                    .clienteId(clienteId)
                     .status(CartStatus.ABERTO)
                     .build();
             model.setId(5L);
+
             BDDMockito.given(service.criarCarrinho(clienteId)).willReturn(domain);
             BDDMockito.given(assembler.toModel(domain)).willReturn(model);
 
@@ -70,7 +70,6 @@ public class CarrinhoControllerTest {
                             .queryParam("clienteId", clienteId.toString()))
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.id").value(5))
-                    .andExpect(jsonPath("$.clienteId").value(10))
                     .andExpect(jsonPath("$.status").value("ABERTO"));
         }
     }
@@ -82,10 +81,11 @@ public class CarrinhoControllerTest {
         @DisplayName("deve retornar 201 e CarrinhoModel atualizado")
         void deveAdicionarItem() throws Exception {
             Long carrinhoId = 7L;
-            ItemCarrinhoModel input = ItemCarrinhoModel.builder()
+            ItemCarrinhoInputModel input = ItemCarrinhoInputModel.builder()
                     .produtoId(3L)
                     .quantidade(2)
                     .build();
+
             Carrinho domain = Carrinho.builder()
                     .id(carrinhoId)
                     .status(CartStatus.ABERTO)
@@ -95,15 +95,14 @@ public class CarrinhoControllerTest {
                     .build();
             model.setId(carrinhoId);
 
-            BDDMockito.given(service.adicionarItemCarrinho(carrinhoId, 3L, 2))
-                    .willReturn(domain);
+            BDDMockito.given(service.adicionarItemCarrinho(carrinhoId, 3L, 2)).willReturn(domain);
             BDDMockito.given(assembler.toModel(domain)).willReturn(model);
 
             mvc.perform(post("/v1/carrinhos/{id}/itens", carrinhoId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(json.writeValueAsString(input)))
                     .andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.id").value(7))
+                    .andExpect(jsonPath("$.id").value(carrinhoId.intValue()))
                     .andExpect(jsonPath("$.status").value("ABERTO"));
         }
     }
@@ -124,8 +123,7 @@ public class CarrinhoControllerTest {
                     .build();
             model.setId(8L);
 
-            BDDMockito.given(service.buscarCarrinhoAberto(clienteId))
-                    .willReturn(Optional.of(domain));
+            BDDMockito.given(service.buscarCarrinhoAberto(clienteId)).willReturn(Optional.of(domain));
             BDDMockito.given(assembler.toModel(domain)).willReturn(model);
 
             mvc.perform(get("/v1/carrinhos/aberto")
@@ -138,8 +136,7 @@ public class CarrinhoControllerTest {
         @Test
         @DisplayName("deve retornar 404 quando não existe carrinho aberto")
         void deve404QuandoNaoExiste() throws Exception {
-            BDDMockito.given(service.buscarCarrinhoAberto(anyLong()))
-                    .willReturn(Optional.empty());
+            BDDMockito.given(service.buscarCarrinhoAberto(anyLong())).willReturn(Optional.empty());
 
             mvc.perform(get("/v1/carrinhos/aberto")
                             .queryParam("clienteId", "99"))

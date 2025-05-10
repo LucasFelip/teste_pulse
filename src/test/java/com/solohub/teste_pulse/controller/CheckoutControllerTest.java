@@ -70,9 +70,6 @@ class CheckoutControllerTest {
                     .build();
 
             PedidoModel model = PedidoModel.builder()
-                    .clienteId(null)  // not returned by this endpoint
-                    .enderecoId(2L)
-                    .transportadoraId(3L)
                     .formaPagamento(FormaPagamento.PIX.name())
                     .frete(new BigDecimal("0.00"))
                     .valorTotal(new BigDecimal("123.45"))

@@ -1,5 +1,8 @@
 package com.solohub.teste_pulse.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +26,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"enderecos", "pedidos"})
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id",
+        scope = Cliente.class)
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Cliente {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
@@ -32,18 +43,20 @@ public class Cliente {
     private String email;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Endereco> enderecos = new ArrayList<>();
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Pedido> pedidos = new ArrayList<>();
 
     public void addEndereco(Endereco endereco) {
         endereco.setCliente(this);
-        this.enderecos.add(endereco);
+        enderecos.add(endereco);
     }
 
     public void removeEndereco(Endereco endereco) {
         endereco.setCliente(null);
-        this.enderecos.remove(endereco);
+        enderecos.remove(endereco);
     }
 }

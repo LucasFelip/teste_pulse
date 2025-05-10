@@ -1,5 +1,9 @@
 package com.solohub.teste_pulse.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.solohub.teste_pulse.domain.model.enums.CartStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -16,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -29,20 +34,27 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"itens"})
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id",
+        scope = Carrinho.class)
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Carrinho {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    @Builder.Default
     @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<ItemCarrinho> itens = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private CartStatus status;
+    private com.solohub.teste_pulse.domain.model.enums.CartStatus status;
 
     @CreationTimestamp
     private OffsetDateTime dataCriacao;
@@ -55,11 +67,11 @@ public class Carrinho {
 
     public void addItem(ItemCarrinho item) {
         item.setCarrinho(this);
-        this.itens.add(item);
+        itens.add(item);
     }
 
     public void removeItem(ItemCarrinho item) {
         item.setCarrinho(null);
-        this.itens.remove(item);
+        itens.remove(item);
     }
 }

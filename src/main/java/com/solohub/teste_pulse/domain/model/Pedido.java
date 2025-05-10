@@ -1,5 +1,8 @@
 package com.solohub.teste_pulse.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.solohub.teste_pulse.domain.model.enums.FormaPagamento;
 import com.solohub.teste_pulse.domain.model.enums.PedidoStatus;
 import jakarta.persistence.CascadeType;
@@ -17,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -30,20 +34,27 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"cliente", "enderecoEntrega", "transportadora", "itens"})
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id",
+        scope = Pedido.class)
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Pedido {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "carrinho_entrega_id")
+    @JoinColumn(name = "carrinho_entrega_id", nullable = false)
     private Endereco enderecoEntrega;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "transportadora_id")
+    @JoinColumn(name = "transportadora_id", nullable = false)
     private Transportadora transportadora;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -53,7 +64,7 @@ public class Pedido {
     private BigDecimal frete;
 
     @Enumerated(EnumType.STRING)
-    private FormaPagamento formaPagamento;
+    private com.solohub.teste_pulse.domain.model.enums.FormaPagamento formaPagamento;
 
     private BigDecimal valorTotal;
 
@@ -61,35 +72,32 @@ public class Pedido {
     private OffsetDateTime dataPedido;
 
     @Enumerated(EnumType.STRING)
-    private PedidoStatus status = PedidoStatus.PENDENTE;
+    private com.solohub.teste_pulse.domain.model.enums.PedidoStatus status;
 
-    public static Pedido fromCarrinho(Carrinho carrinho, Endereco endereco, Transportadora transportadora, FormaPagamento formaPagamento) {
+    public static Pedido fromCarrinho(Carrinho carrinho, Endereco endereco, Transportadora transportadora, com.solohub.teste_pulse.domain.model.enums.FormaPagamento formaPagamento) {
         BigDecimal frete = transportadora.getFreteFixo();
         BigDecimal totalItens = carrinho.calcularTotal();
 
-        List<ItemPedido> itemPedidos = new ArrayList<>();
+        Pedido pedido = Pedido.builder()
+                .cliente(carrinho.getCliente())
+                .enderecoEntrega(endereco)
+                .transportadora(transportadora)
+                .frete(frete)
+                .formaPagamento(formaPagamento)
+                .valorTotal(totalItens.add(frete))
+                .status(com.solohub.teste_pulse.domain.model.enums.PedidoStatus.PENDENTE)
+                .build();
+
         carrinho.getItens().forEach(item -> {
-            var ip = ItemPedido.builder()
+            ItemPedido ip = ItemPedido.builder()
                     .produto(item.getProduto())
                     .quantidade(item.getQuantidade())
                     .precoUnitario(item.getPrecoUnitario())
                     .build();
-            ip.setPedido(null);
-            itemPedidos.add(ip);
-        });
-        var pedido = Pedido.builder()
-                .cliente(carrinho.getCliente())
-                .enderecoEntrega(endereco)
-                .frete(frete)
-                .transportadora(transportadora)
-                .formaPagamento(formaPagamento)
-                .valorTotal(totalItens.add(frete))
-                .build();
-        itemPedidos.forEach(ip -> {
             ip.setPedido(pedido);
             pedido.getItens().add(ip);
         });
-        pedido.setStatus(PedidoStatus.PAGO);
+
         return pedido;
     }
 }

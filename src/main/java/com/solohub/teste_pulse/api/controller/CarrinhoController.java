@@ -2,6 +2,7 @@ package com.solohub.teste_pulse.api.controller;
 
 import com.solohub.teste_pulse.api.assembler.CarrinhoAssembler;
 import com.solohub.teste_pulse.api.model.CarrinhoModel;
+import com.solohub.teste_pulse.api.model.ItemCarrinhoInputModel;
 import com.solohub.teste_pulse.api.model.ItemCarrinhoModel;
 import com.solohub.teste_pulse.domain.exceptions.ResourceNotFoundException;
 import com.solohub.teste_pulse.domain.model.Carrinho;
@@ -73,7 +74,7 @@ public class CarrinhoController {
     )
     public CarrinhoModel adicionarItem(
             @PathVariable Long carrinhoId,
-            @RequestBody @Valid ItemCarrinhoModel input
+            @RequestBody @Valid ItemCarrinhoInputModel input
     ) {
         Carrinho carrinho = carrinhoService.adicionarItemCarrinho(
                 carrinhoId,

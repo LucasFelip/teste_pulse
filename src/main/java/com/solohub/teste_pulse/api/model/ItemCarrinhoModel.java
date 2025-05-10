@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 @Builder
 @EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 public class ItemCarrinhoModel extends AbstractModel {
-    private Long produtoId;
     private Integer quantidade;
     private BigDecimal precoUnitario;
 }

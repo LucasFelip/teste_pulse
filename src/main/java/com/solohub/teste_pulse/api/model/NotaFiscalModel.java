@@ -6,14 +6,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
-public class ItemPedidoModel extends AbstractModel {
-    private Integer quantidade;
-    private BigDecimal precoUnitario;
+public class NotaFiscalModel extends AbstractModel{
+    private String numero;
+    private OffsetDateTime dataEmissao;
+    private String jsonNota;
 }

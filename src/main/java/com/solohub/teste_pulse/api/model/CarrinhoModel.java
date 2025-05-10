@@ -16,7 +16,6 @@ import java.util.List;
 @Builder
 @EqualsAndHashCode (callSuper = true,onlyExplicitlyIncluded = true)
 public class CarrinhoModel extends AbstractModel {
-    private Long clienteId;
     private List<ItemCarrinhoModel> itens = new ArrayList<>();
     private CartStatus status;
 }

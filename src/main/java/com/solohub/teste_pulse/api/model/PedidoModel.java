@@ -17,9 +17,6 @@ import java.util.List;
 @Builder
 @EqualsAndHashCode(callSuper = true,onlyExplicitlyIncluded = true)
 public class PedidoModel extends AbstractModel {
-    private Long clienteId;
-    private Long enderecoId;
-    private Long transportadoraId;
     private String formaPagamento;
     private List<ItemPedidoModel> itens = new ArrayList<>();
     private BigDecimal frete;

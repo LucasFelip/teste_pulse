@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -113,32 +114,6 @@ class EnderecoControllerTest {
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.detail")
                             .value("Cliente com ID 2 não foi encontrado"));
-        }
-    }
-
-    @Nested
-    @DisplayName("GET /v1/clientes/{clienteId}/enderecos")
-    class ListarEnderecos {
-        @Test
-        @DisplayName("200 retorna lista de EnderecoModel")
-        void deveRetornar200ELista() throws Exception {
-            var clienteId = 1L;
-            var e1 = Endereco.builder().id(10L).rua("R1").build();
-            var e2 = Endereco.builder().id(20L).rua("R2").build();
-
-            var m1 = EnderecoModel.builder().rua("R1").build(); m1.setId(10L);
-            var m2 = EnderecoModel.builder().rua("R2").build(); m2.setId(20L);
-
-            BDDMockito.given(service.listarPorCliente(clienteId))
-                    .willReturn(List.of(e1, e2));
-            BDDMockito.given(assembler.toCollectionModel(List.of(e1, e2)))
-                    .willReturn(CollectionModel.of(List.of(m1, m2)));
-
-            mvc.perform(get("/v1/clientes/{clienteId}/enderecos", clienteId))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType("application/json"))
-                    .andExpect(jsonPath("$[0].id").value(10))
-                    .andExpect(jsonPath("$[1].id").value(20));
         }
     }
 

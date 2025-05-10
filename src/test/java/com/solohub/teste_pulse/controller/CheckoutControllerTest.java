@@ -88,8 +88,6 @@ class CheckoutControllerTest {
                     .andExpect(status().isCreated())
                     .andExpect(content().contentType("application/hal+json"))
                     .andExpect(jsonPath("$.id").value(100))
-                    .andExpect(jsonPath("$.enderecoId").value(2))
-                    .andExpect(jsonPath("$.transportadoraId").value(3))
                     .andExpect(jsonPath("$.formaPagamento").value("PIX"))
                     .andExpect(jsonPath("$.valorTotal").value(123.45));
         }

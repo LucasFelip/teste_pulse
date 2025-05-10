@@ -2,9 +2,12 @@ package com.solohub.teste_pulse.controller;
 
 import com.solohub.teste_pulse.api.controller.RelatorioController;
 import com.solohub.teste_pulse.api.assembler.RelatorioPedidoAssembler;
+import com.solohub.teste_pulse.api.model.NotaFiscalModel;
+import com.solohub.teste_pulse.api.model.PedidoModel;
 import com.solohub.teste_pulse.api.model.RelatorioPedidoModel;
 import com.solohub.teste_pulse.domain.model.NotaFiscal;
 import com.solohub.teste_pulse.domain.model.Pedido;
+import com.solohub.teste_pulse.domain.model.enums.FormaPagamento;
 import com.solohub.teste_pulse.domain.model.enums.PedidoStatus;
 import com.solohub.teste_pulse.domain.model.record.RelatorioPedido;
 import com.solohub.teste_pulse.domain.service.RelatorioService;
@@ -58,6 +61,7 @@ class RelatorioControllerTest {
                     .valorTotal(new BigDecimal("150.00"))
                     .frete(new BigDecimal("10.00"))
                     .dataPedido(OffsetDateTime.parse("2025-05-01T10:00:00Z"))
+                    .formaPagamento(FormaPagamento.PIX)
                     .status(PedidoStatus.PAGO)
                     .build();
             NotaFiscal nota = NotaFiscal.builder()
@@ -72,16 +76,26 @@ class RelatorioControllerTest {
             BDDMockito.given(relatorioService.gerarRelatorioPorCliente(clienteId))
                     .willReturn(listaDominio);
 
-RelatorioPedidoModel model = RelatorioPedidoModel.builder()
-        .pedido(pedido)
-            .formaPagamento(pedido.getFormaPagamento().name())
-            .status(pedido.getStatus().name())
-            .dataPedido(pedido.getDataPedido())
-            .dataEmissaoNota(nota.getDataEmissao())
-            .valorTotal(pedido.getValorTotal())
-            .frete(pedido.getFrete())
-            .numeroNota(nota.getNumero())
-    .build();
+            PedidoModel pedidoModel = PedidoModel.builder()
+                    .formaPagamento(pedido.getFormaPagamento().name())
+                    .valorTotal(pedido.getValorTotal())
+                    .frete(pedido.getFrete())
+                    .status(pedido.getStatus().name())
+                    .dataPedido(pedido.getDataPedido())
+                    .build();
+            pedidoModel.setId(pedido.getId());
+
+            NotaFiscalModel notaModel = NotaFiscalModel.builder()
+                    .numero(nota.getNumero())
+                    .dataEmissao(nota.getDataEmissao())
+                    .jsonNota(nota.getJsonNota())
+                    .build();
+            notaModel.setId(nota.getId());
+
+            RelatorioPedidoModel model = RelatorioPedidoModel.builder()
+                    .pedido(pedidoModel)
+                    .notaFiscal(notaModel)
+                    .build();
             model.setId(pedido.getId());
 
             BDDMockito.given(assembler.toCollectionModel(listaDominio))
@@ -92,11 +106,12 @@ RelatorioPedidoModel model = RelatorioPedidoModel.builder()
                     .andExpect(status().isOk())
                     .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$._embedded.relatorioPedidoModelList").isArray())
-                    .andExpect(jsonPath("$._embedded.relatorioPedidoModelList[0].id").value(7))
-                    .andExpect(jsonPath("$._embedded.relatorioPedidoModelList[0].notaFiscalId").value(99))
-                    .andExpect(jsonPath("$._embedded.relatorioPedidoModelList[0].numeroNota").value("NF-123"))
-                    .andExpect(jsonPath("$._embedded.relatorioPedidoModelList[0].valorTotal").value(150.00))
-                    .andExpect(jsonPath("$._embedded.relatorioPedidoModelList[0].frete").value(10.00));
+                    .andExpect(jsonPath("$._embedded.relatorioPedidoModelList[0].pedido.id").value(7))
+                    .andExpect(jsonPath("$._embedded.relatorioPedidoModelList[0].pedido.formaPagamento").value("PIX"))
+                    .andExpect(jsonPath("$._embedded.relatorioPedidoModelList[0].pedido.valorTotal").value(150.00))
+                    .andExpect(jsonPath("$._embedded.relatorioPedidoModelList[0].pedido.frete").value(10.00))
+                    .andExpect(jsonPath("$._embedded.relatorioPedidoModelList[0].notaFiscal.id").value(99))
+                    .andExpect(jsonPath("$._embedded.relatorioPedidoModelList[0].notaFiscal.numero").value("NF-123"));
         }
 
         @Test

@@ -20,13 +20,13 @@ A aplicação segue uma arquitetura em camadas (Controller, Service, Domain, Rep
 
 ## Configuração de Ambiente
 
-Crie um arquivo `.env` na raiz do projeto com as variáveis abaixo (exemplo disponível em `.env.example`):
+Crie um arquivo `.env` na raiz do projeto com as variáveis abaixo:
 
 ```dotenv
 SERVER_PORT=8080
 DB_URL=jdbc:postgresql://localhost:5432/teste_pulse
 DB_USER=postgres
-DB_PASSWORD=RjoA23e4_Q_
+DB_PASSWORD=password
 JPA_DDL_AUTO=update
 JPA_SHOW_SQL=true
 FLYWAY_ENABLED=true
@@ -80,6 +80,8 @@ Serviços disponíveis:
 * `api`: exposta em `localhost:8080` após o banco estar saudável
 
 ### Utilizando a imagem pronta
+
+Link da imagem: [luscaferreira/teste_pulse](https://hub.docker.com/r/luscaferreira/teste_pulse)
 
 ```bash
   docker run --rm -p 8080:8080 --env-file .env luscaferreira/teste_pulse:latest

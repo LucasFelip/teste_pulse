@@ -94,7 +94,8 @@ Serviços disponíveis:
 Link da imagem: [luscaferreira/teste_pulse](https://hub.docker.com/r/luscaferreira/teste_pulse)
 
 ```bash
-  docker run --rm -p 8080:8080 --env-file .env luscaferreira/teste_pulse:latest
+  docker pull luscaferreira/teste_pulse:latest
+  docker-compose up -d
 ```
 
 ## Documentação Swagger

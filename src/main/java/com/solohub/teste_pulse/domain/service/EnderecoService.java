@@ -20,6 +20,12 @@ public class EnderecoService {
     public Endereco criar(Long clienteId, Endereco endereco) {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente",clienteId));
+
+        buscarPrincipal(clienteId).ifPresent(enderecoPrincipal -> {
+            enderecoPrincipal.setIsPrincipal(false);
+            enderecoRepository.save(enderecoPrincipal);
+        });
+
         endereco.setCliente(cliente);
         return enderecoRepository.save(endereco);
     }

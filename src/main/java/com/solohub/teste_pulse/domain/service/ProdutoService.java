@@ -29,6 +29,9 @@ public class ProdutoService {
     }
 
     public void deletar(Long id) {
-        produtoRepository.deleteById(id);
+        var produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto",id));
+        produto.setAtivo(false);
+        produtoRepository.save(produto);
     }
 }

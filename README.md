@@ -95,7 +95,6 @@ Link da imagem: [luscaferreira/teste_pulse](https://hub.docker.com/r/luscaferrei
 
 ```bash
   docker pull luscaferreira/teste_pulse:latest
-  docker-compose up -d
 ```
 
 ## Documentação Swagger

@@ -29,6 +29,9 @@ public class ClienteService {
     }
 
     public void deletar(Long id) {
-        clienteRepository.deleteById(id);
+        var cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente",id));
+        cliente.setAtivo(false);
+        clienteRepository.save(cliente);
     }
 }

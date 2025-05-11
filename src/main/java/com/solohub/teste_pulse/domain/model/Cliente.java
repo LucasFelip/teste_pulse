@@ -50,6 +50,8 @@ public class Cliente {
     @Builder.Default
     private List<Pedido> pedidos = new ArrayList<>();
 
+    private Boolean ativo = true;
+
     public void addEndereco(Endereco endereco) {
         endereco.setCliente(this);
         enderecos.add(endereco);

@@ -12,6 +12,16 @@ Este projeto implementa uma **API RESTful** para um sistema de checkout e fatura
 
 A aplicação segue uma arquitetura em camadas (Controller, Service, Domain, Repository) e utiliza tecnologias como **Spring Boot**, **JPA/Hibernate**, **Flyway**, **ModelMapper**, **HATEOAS**, **JUnit 5** e **Mockito**.
 
+> **_NOTA:_**  A documentação com explicação de decições arquiteturais e detalhes de implementação está disponível na pasta `docs` do projeto.
+> - [Visualizar PDF](docs/documentacao_tecnica.pdf)
+> - [Download do código LaTeX](docs/documentacao_tecnica.zip)
+
+## Decisões Arquiteturais
+- Adoção da arquitetura em camadas (Controller, Service, Domain, Repository)
+- Uso do padrão DTO + Assembler para separar modelos de entrada e saída
+- ModelMapper para mapear objetos entre camadas
+- Flyway para versionamento de banco
+
 ## Pré-requisitos
 
 - Java 17

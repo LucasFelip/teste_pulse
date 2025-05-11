@@ -26,6 +26,12 @@ public class CarrinhoService {
     public Carrinho criarCarrinho(Long clienteId) {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente", clienteId));
+
+        buscarCarrinhoAberto(clienteId).ifPresent(carrinhoAberto -> {
+            carrinhoAberto.setStatus(CartStatus.ENCERRADO);
+            carrinhoRepository.save(carrinhoAberto);
+        });
+
         Carrinho carrinho = Carrinho.builder()
                 .cliente(cliente)
                 .status(CartStatus.ABERTO)

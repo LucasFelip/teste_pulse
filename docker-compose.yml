@@ -16,6 +16,7 @@ services:
       retries: 5
 
   api:
+    image: luscaferreira/teste_pulse
     build:
       context: .
       dockerfile: Dockerfile
